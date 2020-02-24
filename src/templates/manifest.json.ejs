@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "name": "MV Proxy (Cygnus)",
+  "version": "0.1.0",
+  "description": "A DevTools extension for working with MV Proxy experiments.",
+  "minimum_chrome_version": "67.0",
+  "devtools_page": "devtools.html",
+  "background": {
+    "scripts": [
+      "<%= router %>"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "<%= content %>"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    "*.js"
+  ],
+  "permissions": [
+    "storage"
+  ]
+}
