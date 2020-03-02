@@ -1,7 +1,8 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const path = require('path');
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import PnpWebpackPlugin from `pnp-webpack-plugin`;
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
+import path from 'path';
 
 module.exports = {
   mode: 'development',
@@ -9,14 +10,21 @@ module.exports = {
     devtools: `${__dirname}/src/devtools.js`,
     router: `${__dirname}/src/scripts/background/message-router.js`,
     ui: `${__dirname}/src/ui/index.js`,
-    'mvproxy-content-script': `${__dirname}/src/scripts/content/mvproxy-content-script.js`
+    'mvproxy-content-script': `${__dirname}/src/scripts/content/mvproxy-content-script.ts`
   },
   output: {
     path: `${__dirname}/dist/chrome`,
     filename: '[name].[chunkhash:8].js'
   },
+  resolve: {
+    plugins: [PnpWebpackPlugin]
+  },
+  resolveLoader: {
+    plugins: [PnpWebpackPlugin.moduleLoader(module)]
+  },
   module: {
     rules: [
+      { test: /\.tsx?$/, loader: require.resolve('ts-loader') },
       {
         enforce: 'pre',
         test: /\.(js|jsx)$/,
@@ -27,7 +35,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: require.resolve('babel-loader'),
           options: {
             presets: ['@babel/preset-env', '@babel/preset-react']
           }

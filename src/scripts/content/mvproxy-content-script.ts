@@ -7,7 +7,7 @@ const script = document.createElement('script');
 script.type = 'text/javascript';
 script.async = true;
 script.src = injector;
-script.onload = () => script.remove();
+script.onload = (): void => script.remove();
 document.body.appendChild(script);
 
 // Event listener
@@ -20,9 +20,9 @@ document.addEventListener(CONSTS.MV_PROXY_EXTENSION_CONNECTION, (e) => {
 });
 
 // send a 1-time message from content-script to
-chrome.runtime.sendMessage(
-  { greeting: 'hello-from-content-script' },
-  (response) => {
-    console.log(response.farewell);
-  }
-);
+// chrome.runtime.sendMessage(
+//   { greeting: 'hello-from-content-script' },
+//   (response) => {
+//     console.log(response.farewell);
+//   }
+// );
