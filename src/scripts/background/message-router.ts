@@ -8,7 +8,7 @@ chrome.runtime.onConnect.addListener((port: chrome.runtime.Port) => {
   console.log('ROUTER::onConnect', port);
   const handleMessage = (message: any, port: chrome.runtime.Port): void => {
     console.log('onConnect', message);
-    !isFSA(message) && port.postMessage(createInvalid('connection'));
+    !isFSA(message) && port.postMessage(createInvalid());
     switch (message.type) {
       case CONSTS.MV_PROXY_EXTENSION_CONNECTION:
         connections = { ...connections };

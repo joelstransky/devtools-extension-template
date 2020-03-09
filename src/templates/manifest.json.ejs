@@ -4,6 +4,11 @@
   "version": "0.1.0",
   "description": "A DevTools extension for working with MV Proxy experiments.",
   "minimum_chrome_version": "67.0",
+  "icons": {
+    "16": "./assets/icon16.png",
+    "48": "./assets/icon48.png",
+    "128": "./assets/icon128.png"
+  },
   "devtools_page": "devtools.html",
   "background": {
     "scripts": [
@@ -23,7 +28,8 @@
     }
   ],
   "web_accessible_resources": [
-    "*.js"
+    "*.js",
+    "*.png"
   ],
   "permissions": [
     "storage"

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { connection } from '../hotbed-ex-chrome';
+import { Causeway, connection, createCauseway } from '../hotbed-ex-chrome';
 
 const App = (): JSX.Element => {
   console.log('APP');
@@ -38,21 +38,24 @@ window.addEventListener('load', () => {
   //   tabId: chrome.devtools.inspectedWindow.tabId
   // });
 
-  const sayNamespace = (namespace: string) => (name = 'joel'): void =>
-    console.log(`Hello ${name}`, namespace);
+  // const sayNamespace = (namespace: string) => (name = 'joel'): void =>
+  //   console.log(`Hello ${name}`, namespace);
 
-  const sayNameString = 'sayNamespace';
-  const extensionId = `${chrome.runtime.id}`;
-  chrome.devtools.inspectedWindow.eval(
-    `window[${extensionId}] = {}`,
-    (result, error) => {
-      if (error) {
-        throw error;
-      }
-      console.log('eval callback', result);
-      chrome.devtools.inspectedWindow.eval(
-        `window[${extensionId}].${sayNameString} = ${sayNamespace.toString()}(${extensionId})`
-      );
-    }
-  );
+  // const sayNameString = 'sayNamespace';
+  // const extensionId = `${chrome.runtime.id}`;
+  // chrome.devtools.inspectedWindow.eval(
+  //   `window[${extensionId}] = {}`,
+  //   (result, error) => {
+  //     if (error) {
+  //       throw error;
+  //     }
+  //     console.log('eval callback', result);
+  //     chrome.devtools.inspectedWindow.eval(
+  //       `window[${extensionId}].${sayNameString} = ${sayNamespace.toString()}(${extensionId})`
+  //     );
+  //   }
+  // );
+
+  const causeway: Causeway = createCauseway();
+  causeway.sayHello();
 });

@@ -1,15 +1,15 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import PnpWebpackPlugin from `pnp-webpack-plugin`;
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-import path from 'path';
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: 'development',
   entry: {
-    devtools: `${__dirname}/src/devtools.js`,
-    router: `${__dirname}/src/scripts/background/message-router.js`,
-    ui: `${__dirname}/src/ui/index.js`,
+    devtools: `${__dirname}/src/devtools.ts`,
+    router: `${__dirname}/src/scripts/background/message-router.ts`,
+    ui: `${__dirname}/src/ui/index.tsx`,
     'mvproxy-content-script': `${__dirname}/src/scripts/content/mvproxy-content-script.ts`
   },
   output: {
@@ -17,37 +17,44 @@ module.exports = {
     filename: '[name].[chunkhash:8].js'
   },
   resolve: {
-    plugins: [PnpWebpackPlugin]
+    plugins: [PnpWebpackPlugin],
+    extensions: ['.tsx', '.ts', '.js']
   },
   resolveLoader: {
     plugins: [PnpWebpackPlugin.moduleLoader(module)]
   },
   module: {
     rules: [
-      { test: /\.tsx?$/, loader: require.resolve('ts-loader') },
+      { test: /\.tsx?$/, use: 'ts-loader', exclude: /node_modules/ },
+      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
       {
         enforce: 'pre',
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: 'eslint-loader'
-      },
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: require.resolve('babel-loader'),
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
-          }
-        }
+        test: /\.js$/,
+        loader: 'source-map-loader'
       },
       {
         test: /\.scss$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: ['file-loader']
       }
     ]
   },
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
+  // @TODO fix this mess
+  // externals: [
+  //   // react: 'React',
+  //   // 'react-dom': 'ReactDOM'
+  //   function(context, request, callback) {
+  //     if (/^.*\/ui$/.test(context)) {
+  //       // console.log('EXTERNALS::', context, request, callback);
+  //       return callback(null, 'react react-dom ' + request);
+  //     }
+  //     callback();
+  //   }
+  // ],
   plugins: [
     new HtmlWebpackPlugin({
       inject: false,
@@ -83,6 +90,7 @@ module.exports = {
       filename: 'injector.js',
       template: 'src/templates/injector.js.ejs'
     }),
+    new CopyPlugin([{ from: 'src/assets', to: 'assets' }]),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({ filename: '[name]-[contenthash:8].css' })
   ]
