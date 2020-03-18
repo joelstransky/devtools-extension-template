@@ -1,4 +1,7 @@
-import * as CONSTS from '../../consts';
+/**
+ * If the extension is active, a single instance of this exists
+ */
+import Consts from '../../consts';
 import { createInvalid } from '../../actions';
 import { isFSA } from 'flux-standard-action';
 // background.js
@@ -10,7 +13,7 @@ chrome.runtime.onConnect.addListener((port: chrome.runtime.Port) => {
     console.log('onConnect', message);
     !isFSA(message) && port.postMessage(createInvalid());
     switch (message.type) {
-      case CONSTS.MV_PROXY_EXTENSION_CONNECTION:
+      case Consts.MV_PROXY_EXTENSION_CONNECTION:
         connections = { ...connections };
         break;
       default:
@@ -41,7 +44,6 @@ chrome.runtime.onConnect.addListener((port: chrome.runtime.Port) => {
 
 // Receive message from content script and relay to the devTools page for the
 // current tab
-// eslint-disable-next-line no-undef
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // Messages from content scripts should have sender.tab set
   if (sender.tab) {

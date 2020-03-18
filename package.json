@@ -25,6 +25,7 @@
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^3.4.2",
     "html-webpack-plugin": "^3.2.0",
+    "keccak": "^3.0.0",
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.13.1",
     "react": "^16.12.0",
@@ -40,8 +41,10 @@
   },
   "devDependencies": {
     "@types/babel__core": "^7.1.6",
+    "@types/copy-webpack-plugin": "^5.0.0",
     "@types/eslint": "6.1.8",
     "@types/eslint-plugin-prettier": "^2.2.0",
+    "@types/file-loader": "^4.2.0",
     "@types/html-webpack-plugin": "^3.2.2",
     "@types/mini-css-extract-plugin": "^0.9.1",
     "@types/node-sass": "^4.11.0",
@@ -68,6 +71,10 @@
     "pnp-webpack-plugin": "^1.6.4",
     "prettier": "^1.19.1",
     "source-map-loader": "^0.2.4",
+    "stylelint-config-prettier": "^8.0.1",
+    "stylelint-prettier": "^1.1.2",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.1.0",
     "typescript": "^3.8.3"
   }
 }

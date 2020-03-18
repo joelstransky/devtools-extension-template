@@ -3,27 +3,43 @@
  * In hotbed, a causeway gives access to the dirty DOM, ie. the DOM as modified by other sources
  * compared to a content_script which only has access to the clean DOM
  */
-import { v4 as uuidv4 } from 'uuid';
+import { Causeway, nsResult } from './types';
+import createKeccakHash from 'keccak';
+
 // first provide a unique causeway connection utility
-export type Causeway = {
-  sayHello: () => void;
+
+const asyncEval = (expression: string): Promise<unknown> => {
+  return new Promise((resolve, reject) => {
+    chrome.devtools.inspectedWindow.eval(expression, (result, err) => {
+      console.log('result', result, 'excepInfo', err);
+      err
+        ? reject(
+            err.isException
+              ? new Error(
+                  `Script Error:: Your expression caused the following exception.\n${err.value}`
+                )
+              : new Error(
+                  `${err.code}:: ${err.description}.\nDetails:: ${err.details}`
+                )
+          )
+        : resolve(result);
+    });
+  });
 };
-export const createCauseway = (): Causeway => {
-  const uuid: string = uuidv4();
+
+export const createCauseway = async (): Promise<Causeway> => {
+  const keccak = createKeccakHash('keccak256')
+    .update(chrome.runtime.id)
+    .digest('hex');
+  console.log('KECCAK::', keccak);
   const causeway: Causeway = {
-    sayHello: (): void => {
+    sayHello: () => {
       console.log('hello');
     }
   };
-  chrome.devtools.inspectedWindow.eval(
-    `window[${uuid}] = {}`,
-    (result, error) => {
-      error && error.isException && console.log('Exception::', error.value);
-      if (error && error.isError) {
-        throw error;
-      }
-    }
-  );
+
+  const asyncResult = await asyncEval(`window["${keccak}"] = {};`);
+  console.log('Eval Result::', asyncResult);
   return causeway;
 };
 // second provide causeway instance api for injecting a method(s)
@@ -31,17 +47,3 @@ export const createCauseway = (): Causeway => {
 // callback api
 // error handling
 // Flux actions
-
-// chrome.devtools.inspectedWindow.eval(
-//   `window[${extensionId}] = {}`,
-//   (result, error) => {
-//     if (error) {
-//       throw error;
-//     }
-//     console.log('eval callback', result);
-//     // eslint-disable-next-line no-undef
-//     chrome.devtools.inspectedWindow.eval(
-//       `window[${extensionId}].${sayNameString} = ${sayNamespace.toString()}(${extensionId})`
-//     );
-//   }
-// );

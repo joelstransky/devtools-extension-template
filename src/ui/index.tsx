@@ -1,3 +1,4 @@
+/** One instance of this is created for every instance of devtools in each tab. */
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Causeway, connection, createCauseway } from '../hotbed-ex-chrome';
@@ -17,7 +18,7 @@ const App = (): JSX.Element => {
     </div>
   );
 };
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
   ReactDOM.render(<App />, document.getElementById('container'));
   // send a 1-time message from content-script to
   // eslint-disable-next-line no-undef
@@ -56,6 +57,6 @@ window.addEventListener('load', () => {
   //   }
   // );
 
-  const causeway: Causeway = createCauseway();
+  const causeway: Causeway = await createCauseway();
   causeway.sayHello();
 });

@@ -10,7 +10,7 @@ module.exports = {
     devtools: `${__dirname}/src/devtools.ts`,
     router: `${__dirname}/src/scripts/background/message-router.ts`,
     ui: `${__dirname}/src/ui/index.tsx`,
-    'mvproxy-content-script': `${__dirname}/src/scripts/content/mvproxy-content-script.ts`
+    'content-script': `${__dirname}/src/scripts/content/content-script.ts`
   },
   output: {
     path: `${__dirname}/dist/chrome`,
@@ -79,7 +79,7 @@ module.exports = {
       templateParameters: (compilation, assets, assetTags, options) => {
         console.log('manifest assets: ', assets);
         return {
-          content: assets.chunks['mvproxy-content-script'].entry,
+          content: assets.chunks['content-script'].entry,
           router: assets.chunks.router.entry
         };
       },

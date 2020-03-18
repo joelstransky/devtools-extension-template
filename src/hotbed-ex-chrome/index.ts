@@ -8,4 +8,5 @@ export const connection = (name: string): chrome.runtime.Port => {
   return port;
 };
 
-export { createCauseway, Causeway } from './causeway';
+export { createCauseway } from './causeway';
+export { Causeway } from './types';
