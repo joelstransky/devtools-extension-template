@@ -11,7 +11,7 @@ script.onload = (): void => script.remove();
 document.body.appendChild(script);
 
 // Event listener
-document.addEventListener(CONSTS.MV_PROXY_EXTENSION_CONNECTION, (e) => {
+document.addEventListener(CONSTS.EXTENSION_CONNECTION, (e) => {
   // e.detail contains the transferred data (can be anything, ranging
   // from JavaScript objects to strings).
   // Do something, for example:

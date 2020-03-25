@@ -1,10 +1,12 @@
 /**
- * If the extension is active, a single instance of this exists
+ * If the extension is active, a single instance of this exists.
+ * Think of this as the extension icon in the omnibar
  */
 import Consts from '../../consts';
 import { createInvalid } from '../../actions';
 import { isFSA } from 'flux-standard-action';
 // background.js
+// 1. create a store to hold ports passed in from tabs when they connect
 let connections = {} as Record<string, chrome.runtime.Port>;
 
 chrome.runtime.onConnect.addListener((port: chrome.runtime.Port) => {
@@ -13,7 +15,7 @@ chrome.runtime.onConnect.addListener((port: chrome.runtime.Port) => {
     console.log('onConnect', message);
     !isFSA(message) && port.postMessage(createInvalid());
     switch (message.type) {
-      case Consts.MV_PROXY_EXTENSION_CONNECTION:
+      case Consts.EXTENSION_CONNECTION:
         connections = { ...connections };
         break;
       default:
